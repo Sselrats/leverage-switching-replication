@@ -27,6 +27,7 @@ Run any command from the extracted directory:
 | `python replay.py transition` | Four interval computations for Proposition 4.3, from positive costs close to zero through 0.085 at F = 2. Allow several minutes. |
 | `python replay.py excursions` | Green-integral check of the improving cycle for both an interior contact and an entrance contact. |
 | `python replay.py points` | Rounded deletion table, cycle occupations and mean leverages at the premium boundary. |
+| `python figure2.py` | CSV of the two tangent-subtracted gain curves in Figure 2, evaluated at the 41 plotted premiums. |
 
 The commands from `menus` through `transition` recompute the outputs, then compare **all** JSON
 fields with the archived results except for the top-level Python version and
@@ -52,3 +53,17 @@ checks for the two deletion signs and the transverse slope.
 The replay stores generated files under `artifacts/` and
 `scripts/paper_v11_research/records/`. The reference directory is read-only
 from the perspective of the replay driver.
+
+## Reproduction of v6.3
+
+On 11 November 2026, the programs were run in a fresh CPython 3.13.2
+environment on macOS arm64 with the versions pinned in `requirements.txt`.
+All eight regenerated records matched their reference data under the
+comparison rules above. The checks covered the two adjacent-policy cost
+intervals, the gain difference at 18 basis points, the premium deletion
+boundary, and the cost transition through 0.085.
+
+The separate point calculations reproduced the rounded deletion table,
+the cycle examples and the two mean leverages in Section S6.4. Both curves
+from `python figure2.py` matched the coordinates in Figure 2 at all
+41 premiums to the precision printed in the TeX source.
