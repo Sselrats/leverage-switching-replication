@@ -6,9 +6,13 @@ inputs. Point arithmetic is used only to propose critical-root brackets.
 from pathlib import Path
 from fractions import Fraction as Q
 import json
+import sys
 from mpmath import mp, iv
 
 ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "scripts"))
+from decimal_bounds import decimal_bounds
+
 OUT = ROOT / "artifacts/v40_rewrite_20260928"
 mp.dps = 80
 iv.dps = 80
@@ -34,9 +38,9 @@ def hi(x):
 
 
 def enc(x):
-    return {"lo": str(lo(x)), "hi": str(hi(x)),
-            "display": [mp.nstr(mp.mpf(lo(x).numerator)/lo(x).denominator, 50),
-                        mp.nstr(mp.mpf(hi(x).numerator)/hi(x).denominator, 50)]}
+    lower, upper = lo(x), hi(x)
+    return {"lo": str(lower), "hi": str(upper),
+            "display": decimal_bounds(lower, upper, 50)}
 
 
 def E(x):

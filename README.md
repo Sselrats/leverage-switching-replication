@@ -1,8 +1,8 @@
 # Optimal Switching among Leverage Levels: From Pairs to Menus
 
-Numerical certificates for the v6.3 manuscript by Mugeon Kim. Section S6 of the mathematical supplement reports the calculations reproduced here.
+Numerical certificates for the v6.3.1 manuscript by Mugeon Kim. Section S6 of the mathematical supplement reports the calculations reproduced here.
 
-Clone this repository at tag `v6.3` or extract the tagged source archive before running any program. An eight-file collection of
+Clone this repository at tag `v6.3.1` or extract the tagged source archive before running any program. An eight-file collection of
 reference JSON records is in `reference/`. The Python programs in this archive generate the records from the stated
 model inputs.
 
@@ -14,6 +14,7 @@ python3 -m venv .venv
 . .venv/bin/activate
 python -m pip install -r requirements.txt
 python replay.py check
+python -m unittest test_decimal_bounds
 ```
 
 Run any command from the extracted directory:
@@ -53,6 +54,15 @@ checks for the two deletion signs and the transverse slope.
 The replay stores generated files under `artifacts/` and
 `scripts/paper_v11_research/records/`. The reference directory is read-only
 from the perspective of the replay driver.
+
+## Decimal interval bounds in v6.3.1
+
+The exact rational endpoints of each interval in `contact.json` and `cycle.json`
+are stored in `lo` and `hi`. Version 6.3.1 rounds their decimal displays
+outward, using 28 significant digits for `decimal_lo` and `decimal_hi` in
+`contact.json` and 50 for the `display` pair in `cycle.json`. In v6.3 these
+display fields used nearest rounding. The regression test compares all 180
+displayed intervals with their exact rational endpoints.
 
 ## Reproduction of v6.3
 

@@ -9,6 +9,10 @@ import sys,json,time,math,hashlib
 from pathlib import Path
 from fractions import Fraction as Q
 import mpmath as mp
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from decimal_bounds import decimal_bounds
+
 assert mp.__version__=='1.3.0'
 mp.mp.dps=90;mp.iv.dps=80;iv=mp.iv;N=180
 OUT=Path(sys.argv[1]);OUT.mkdir(parents=True,exist_ok=True)
@@ -20,11 +24,13 @@ def exact_endpoint(t):
 def lo(x):return exact_endpoint(x._mpi_[0])
 def hi(x):return exact_endpoint(x._mpi_[1])
 def I(l,h):return iv.mpf([V(l).a,V(h).b])
-def dec(q):return mp.nstr(mp.mpf(q.numerator)/q.denominator,28)
 def M(q):q=Q(q);return mp.mpf(q.numerator)/q.denominator
 def sg(x):return 1 if lo(x)>0 else -1 if hi(x)<0 else 0
 def enc(x):
- if hasattr(x,'_mpi_'):return {'lo':str(lo(x)),'hi':str(hi(x)),'decimal_lo':dec(lo(x)),'decimal_hi':dec(hi(x))}
+ if hasattr(x,'_mpi_'):
+  lower,upper=lo(x),hi(x)
+  left,right=decimal_bounds(lower,upper,28)
+  return {'lo':str(lower),'hi':str(upper),'decimal_lo':left,'decimal_hi':right}
  if isinstance(x,Q):return str(x)
  if isinstance(x,dict):return {str(k):enc(v) for k,v in x.items()}
  if isinstance(x,(list,tuple)):return [enc(v) for v in x]
